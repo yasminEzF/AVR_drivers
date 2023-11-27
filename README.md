@@ -61,7 +61,7 @@ This function is used to retrieve the value of a specific pin on a given port. I
 - `Copy_u8Pin`: The pin number whose value will be retrieved.
 - `Copy_pu8PinValue`: A pointer to a variable where the pin value will be stored.
 
-### 6. `void DIO_DelayMs(uint32_t TimeMs)`
+### 6. `void DIO_DelayMs(u32 Copy_u32TimeMs)`
 
 This function introduces a delay in milliseconds using the `NOP` instruction. It can be used to pause the execution of your code for a specific duration.
 
