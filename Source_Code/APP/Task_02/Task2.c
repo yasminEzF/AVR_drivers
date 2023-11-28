@@ -1,51 +1,101 @@
-/*
- * main.c
- *
- *  Created on: Nov 26, 2023
- *      Author: Mayada
- */
-#include"../../LIB/STD_TYPES.h"
-#include"../../LIB/Bit_Math.h"
-#include"../../MCAL/1-DIO/DIO.h"
+#include "C:\Users\omar\Documents\Atmel Studio\7.0\XC8Application1\DIO.h"
 
-#include<util/delay.h>
 
-int main (void)
+void binary(int c,DIO_enumPorts_t x)
 {
+	int a[4] = {0,0,0,0};
+	int n = c;
+	int i;
+	for(i=0;c>0;i++)
+	{
+		a[i]=c%2;
+		c=c/2;
+	}
+	{
+		if(a[0])
+		{
+			DIO_enumSetPin(x,DIO_enumPin0,DIO_enumLogicHigh);
+		}
+		else
+		{
+			DIO_enumSetPin(x,DIO_enumPin0,DIO_enumLogicLow);
+		}
+	}
+	
+	{
+		if(a[1])
+		{
+			DIO_enumSetPin(x,DIO_enumPin1,DIO_enumLogicHigh);
+		}
+		else
+		{
+			DIO_enumSetPin(x,DIO_enumPin1,DIO_enumLogicLow);
+		}
+	}
+	
+	{
+		if(a[2])
+		{
+			DIO_enumSetPin(x,DIO_enumPin2,DIO_enumLogicHigh);
+		}
+		else
+		{
+			DIO_enumSetPin(x,DIO_enumPin2,DIO_enumLogicLow);
+		}
+	}
+	
+	{
+		if(a[3])
+		{
+			DIO_enumSetPin(x,DIO_enumPin3,DIO_enumLogicHigh);
+		}
+		else
+		{
+			DIO_enumSetPin(x,DIO_enumPin3,DIO_enumLogicLow);
+		}
+	}
+}
+
+
+int main(void)
+{
+	
+	DIO_enumError_t Error_status;
+	
+	Error_status = DIO_enumSetPinConfig(DIO_enumPortA,DIO_enumPin0,DIO_enumOutput);
+	while(Error_status != DIO_enumOk);
+	Error_status = DIO_enumSetPinConfig(DIO_enumPortA,DIO_enumPin1,DIO_enumOutput);
+	while(Error_status != DIO_enumOk);
+	Error_status = DIO_enumSetPinConfig(DIO_enumPortA,DIO_enumPin2,DIO_enumOutput);
+	while(Error_status != DIO_enumOk);
+	Error_status = DIO_enumSetPinConfig(DIO_enumPortA,DIO_enumPin3,DIO_enumOutput);
+	while(Error_status != DIO_enumOk);
+	Error_status = DIO_enumSetPinConfig(DIO_enumPortA,DIO_enumPin4,DIO_enumInputInternalPU);
+	while(Error_status != DIO_enumOk);
+	
+	
+	int count = 0;
+	DIO_enumLogicState_t button = DIO_enumLogicLow;
+	DIO_enumReadState(DIO_enumPortB,DIO_enumPin4,&button);
+	
+	
 	while(1)
 	{
-		
-
-
-		/**set portB as output for 4 led**/
-		DIO_u8SetPortDirection(DIO_u8PORTB,DIO_u8PORT_OUTPUT);
-		/**set pin A0 as input for switch**/
-	    DIO_u8SetPinDirection(DIO_u8PORTA,DIO_u8PIN0,DIO_u8PIN_INPUT);
-	    /**activate pullup for pin A0**/
-	    DIO_u8SetPinValue(DIO_u8PORTA,DIO_u8PIN0,DIO_u8PIN_HIGH);
-	    /**to store value of pin A0**/
-		u8 Local_u8Counter=0;
-		u8 Local_u8PinValue;
-		while(Local_u8Counter<16)
+		while (button == DIO_enumLogicLow)
 		{
-			/**to read value of pin A0**/
-			DIO_u8GetPinValue(DIO_u8PORTA,DIO_u8PIN0,&Local_u8PinValue);
-			if(!Local_u8PinValue)
-			{
-				Local_u8Counter++;
-			}
-			_delay_ms(1000);
-			/**set portB as value of Local_u8Counter for 4 led**/
-			DIO_u8SetPortValue(DIO_u8PORTB,Local_u8Counter);
-			_delay_ms(1000);
-
-
+			DIO_enumReadState(DIO_enumPortB,DIO_enumPin4,&button);
 		}
-
-
-
+		count++;
+		if (count > 15)
+		{
+			count = 0;
+		}
+		binary(count,DIO_enumPortA);                         //this violates it unless we modify the main function to take the lower nibble
+		while (button == DIO_enumLogicHigh)
+		{
+			DIO_enumReadState(DIO_enumPortB,DIO_enumPin4,&button);
+		}
 
 	}
 	return 0;
 }
-

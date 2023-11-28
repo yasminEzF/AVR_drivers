@@ -1,45 +1,33 @@
-/*
- * main.c
- *
- *  Created on: Nov 26, 2023
- *      Author: Mayada
- */
-#include"../../LIB/STD_TYPES.h"
-#include"../../LIB/Bit_Math.h"
-#include"../../MCAL/1-DIO/DIO.h"
+#include "C:\Users\omar\Documents\Atmel Studio\7.0\XC8Application1\DIO.h"
 
-#include<util/delay.h>
 
-int main (void)
+void delay_ms(unsigned int milliseconds) {
+
+	for (unsigned int i = 0; i < milliseconds; ++i) {
+		for (unsigned int j = 0; j < 100; ++j) {
+			asm volatile("nop"); 
+		}
+	}
+}
+
+int main(void)
 {
+	
+	DIO_enumError_t Error_status;
+	
+	Error_status = DIO_enumSetPinConfig(DIO_enumPortA,DIO_enumPin0,DIO_enumOutput);
+	while(Error_status != DIO_enumOk);
+	Error_status = DIO_enumSetPinConfig(DIO_enumPortA,DIO_enumPin1,DIO_enumOutput);
+	while(Error_status != DIO_enumOk);
+	
 	while(1)
 	{
-		/**TASK1**/
-		/**set pin A0 as output for first led**/
-		DIO_u8SetPinDirection(DIO_u8PORTA,DIO_u8PIN0,DIO_u8PIN_OUTPUT);
-		/**set pin A1 as output for second led**/
-		DIO_u8SetPinDirection(DIO_u8PORTA,DIO_u8PIN1,DIO_u8PIN_OUTPUT);
-
-		/**set pin A1 as low**/
-		DIO_u8SetPinValue(DIO_u8PORTA,DIO_u8PIN1,DIO_u8PIN_LOW);
-		/**set pin A0 as high**/
-		DIO_u8SetPinValue(DIO_u8PORTA,DIO_u8PIN0,DIO_u8PIN_HIGH);
-
-		_delay_ms(1000);
-		/**set pin A0 as low**/
-		DIO_u8SetPinValue(DIO_u8PORTA,DIO_u8PIN0,DIO_u8PIN_LOW);
-		/**set pin A1 as high**/
-		DIO_u8SetPinValue(DIO_u8PORTA,DIO_u8PIN1,DIO_u8PIN_HIGH);
-
-		_delay_ms(1000);
-
-
-	
-
-
-
-
+		DIO_enumSetPin(DIO_enumPortA,DIO_enumPin1,DIO_enumLogicLow);
+		DIO_enumSetPin(DIO_enumPortA,DIO_enumPin0,DIO_enumLogicHigh);
+		delay_ms(1000);
+		DIO_enumSetPin(DIO_enumPortA,DIO_enumPin0,DIO_enumLogicLow);
+		DIO_enumSetPin(DIO_enumPortA,DIO_enumPin1,DIO_enumLogicHigh);
+		delay_ms(1000);
 	}
 	return 0;
 }
-
