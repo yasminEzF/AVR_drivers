@@ -98,41 +98,41 @@
 
 typedef enum {
 #if ((PORTS_NUM == PORT_A)||(PORTS_NUM == PORTS_A_B)||(PORTS_NUM == PORTS_A_B_C)||(PORTS_NUM == PORTS_A_B_C_D))
-	port_enumPortA = 0
+	portCfg_enumPortA = 0
 #endif
 #if ((PORTS_NUM == PORTS_A_B)||(PORTS_NUM == PORTS_A_B_C)||(PORTS_NUM == PORTS_A_B_C_D))
-	,port_enumPortB
+	,portCfg_enumPortB
 #endif
 #if ((PORTS_NUM == PORTS_A_B_C)||(PORTS_NUM == PORTS_A_B_C_D))
-	,port_enumPortC
+	,portCfg_enumPortC
 #endif
 #if (PORTS_NUM == PORTS_A_B_C_D)
-	,port_enumPortD
+	,portCfg_enumPortD
 #endif
-}port_enumPorts_t;
+}portCfg_enumPorts_t;
 
 typedef enum
 {
-	port_enumP0 = 0,
-	port_enumP1,
-	port_enumP2,
-	port_enumP3,
-	port_enumP4,
-	port_enumP5,
-	port_enumP6,
-	port_enumP7
-}port_enumPins_t;
+	portCfg_enumP0 = 0,
+	portCfg_enumP1,
+	portCfg_enumP2,
+	portCfg_enumP3,
+	portCfg_enumP4,
+	portCfg_enumP5,
+	portCfg_enumP6,
+	portCfg_enumP7
+}portCfg_enumPins_t;
 
 typedef enum {
 	/**
 	 *@brief : Select Pin Configuration to be Output.
 	 */
-	pin_enumOutput = 0,
+	pinCfg_enumOutput = 0,
 	/**
 	 *@brief : Select Pin Configuration to be Input.
 	 */
-	pin_enumInput
-}pin_enumConfig_t;
+	pinCfg_enumInput
+}pinCfg_enumConfig_t;
 
 typedef enum {
 	/**
@@ -140,18 +140,18 @@ typedef enum {
 	 * incase input : 	input external pulldown
 	 * incase output :	output low
 	 */
-	pin_enumInactive = 0,
+	pinCfg_enumInactive = 0,
 	/**
 	 *@brief : Select Pin Configuration to be High.
 	 * incase input : 	input internal pullup
 	 * incase output :	output high
 	 */
-	pin_enumActive
-}pin_enumState_t;
+	pinCfg_enumActive
+}pinCfg_enumState_t;
 
 typedef struct {
-	pin_enumConfig_t pinConfig;
-	pin_enumState_t pinState;
-}pinConfigStruct_t;
+	pinCfg_enumConfig_t pinConfig;
+	pinCfg_enumState_t pinState;
+}pinCfgConfigStruct_t;
 
 #endif /* PORTCFG_H_ */

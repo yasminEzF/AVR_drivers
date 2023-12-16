@@ -35,7 +35,7 @@
 
 #elif(CONFIGURATION_STYLE == POST_COMPILE)
     
-    pinConfigStruct_t portConfigArr [PORTS_NUM][8];
+    extern pinCfgConfigStruct_t portConfigArr [PORTS_NUM][8];
 
     void portInit(void) {
         volatile u8 *DDR_regPtr = NULL, *PORT_regPtr = NULL;
@@ -89,4 +89,70 @@
         }
     }
 #endif
+
+port_enumError_t port_setCfg(port_configStruct_t* cfgPtr) {
+    
+    port_enumError_t errorStatus = port_enumNotOk;
+	if(cfgPtr->port_ID > PORTS_NUM) {
+		errorStatus = port_enumWrongPort;
+	}
+	else if(cfgPtr->pin_ID > port_enumP7) {
+		errorStatus = port_enumWrongPin;
+	}
+    else if(cfgPtr->pinCfg.pinDir > pin_enumInput) {
+		errorStatus = port_enumWrongPinState;
+	}
+    else if(cfgPtr->pinCfg.pinState > pin_enumActive) {
+		errorStatus = port_enumWrongPinState;
+	}
+	else {
+		errorStatus = port_enumOk;
+        volatile u8 *DDR_regPtr = NULL, *PORT_regPtr = NULL;
+		switch(cfgPtr->port_ID) {
+#if ((PORTS_NUM == PORT_A)||(PORTS_NUM == PORTS_A_B)||(PORTS_NUM == PORTS_A_B_C)||(PORTS_NUM == PORTS_A_B_C_D))
+            case port_enumPortA:
+                DDR_regPtr = DDRA_REG;
+                PORT_regPtr = PORTA_REG;
+            break;
+#endif
+#if ((PORTS_NUM == PORTS_A_B)||(PORTS_NUM == PORTS_A_B_C)||(PORTS_NUM == PORTS_A_B_C_D))
+            case port_enumPortB:
+                DDR_regPtr = DDRB_REG;
+                PORT_regPtr = PORTB_REG;
+            break;
+#endif
+#if ((PORTS_NUM == PORTS_A_B_C)||(PORTS_NUM == PORTS_A_B_C_D))
+            case port_enumPortC:
+                DDR_regPtr = DDRC_REG;
+                PORT_regPtr = PORTC_REG;
+            break;
+#endif
+#if (PORTS_NUM == PORTS_A_B_C_D)
+            case port_enumPortD:
+                DDR_regPtr = DDRD_REG;
+                PORT_regPtr = PORTD_REG;
+            break;
+#endif
+        }
+        if((DDR_regPtr != NULL) && (PORT_regPtr != NULL)) {
+            switch(cfgPtr->pinCfg.pinDir) {
+                    case pin_enumOutput:
+                        SET_BIT(*DDR_regPtr,cfgPtr->pin_ID);
+                        break;
+                    case pin_enumInput:
+                        CLR_BIT(*DDR_regPtr,cfgPtr->pin_ID);
+                        break;
+            }
+            switch(cfgPtr->pinCfg.pinState) {
+                case pin_enumOutput:
+                    SET_BIT(*PORT_regPtr,cfgPtr->pin_ID);
+                    break;
+                case pin_enumInput:
+                    CLR_BIT(*PORT_regPtr,cfgPtr->pin_ID);
+                    break;
+            }
+        }
+    }
+    return errorStatus;
+}
 
