@@ -1,7 +1,7 @@
-#include "bit_math.h"
-#include "std_types.h"
-#include "AVR_reg.h"
-#include "portCfg.h"
+#include "../../00_LIB/bit_math.h"
+#include "../../00_LIB/std_types.h"
+#include "../../00_LIB/AVR_reg.h"
+#include "../01_PORT/portCfg.h"
 #include "dio.h"
 
 DIO_enumError_t DIO_enumSetPinConfig(DIO_enumPorts_t Copy_enumPortNum,DIO_enumPins_t Copy_enumPinNum,DIO_enumConfig_t Copy_enumConfig) {

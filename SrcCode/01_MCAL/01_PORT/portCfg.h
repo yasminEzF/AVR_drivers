@@ -1,8 +1,6 @@
 #ifndef PORTCFG_H_
 #define PORTCFG_H_
 
-#include "std_types.h"
-
 /*  choose pre or post compile  */
 #define CONFIGURATION_STYLE      POST_COMPILE		/*configuration style*/
 

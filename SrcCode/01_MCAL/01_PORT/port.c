@@ -1,5 +1,6 @@
-#include "AVR_reg.h"
-#include "bit_math.h"
+#include "../../00_LIB/AVR_reg.h"
+#include "../../00_LIB/bit_math.h"
+#include "../../00_LIB/std_types.h"
 #include "portCfg.h"
 #include "port.h"
 

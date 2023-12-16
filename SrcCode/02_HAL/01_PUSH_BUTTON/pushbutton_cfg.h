@@ -3,23 +3,6 @@
 
 #include "01_PORT/port.h"
 
-/*
-* port_enumP0,
-	port_enumP1,
-	port_enumP2,
-	port_enumP3,
-	port_enumP4,
-	port_enumP5,
-	port_enumP6,
-	port_enumP7
-*/
-/**
- * port_enumPortA,
-	port_enumPortB,
-	port_enumPortC,
-	port_enumPortD
-*/
-
 #define NUM_PB          2
 
 #define PB_1            0

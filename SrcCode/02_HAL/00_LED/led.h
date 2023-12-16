@@ -1,6 +1,7 @@
 #ifndef LED_H_
 #define LED_H_
 
+#include "../../00_LIB/std_types.h"
 typedef enum
 {
 	/**

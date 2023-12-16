@@ -1,5 +1,4 @@
 #include "portCfg.h"
-#include "std_types.h"
 
 #if (CONFIGURATION_STYLE == PRE_COMPILE)
 
