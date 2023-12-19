@@ -3,6 +3,7 @@
         "bit_math.h": "c",
         "std_types.h": "c",
         "avr_reg.h": "c",
-        "portcfg.h": "c"
+        "portcfg.h": "c",
+        "port.h": "c"
     }
 }

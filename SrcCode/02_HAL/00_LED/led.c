@@ -47,7 +47,10 @@ led_enumError_t ledInit(void) {
             }         
             if(!port_setCfg(&current_led)) {
                 errorStatus = led_enumOk;
-            }                        
+            }
+            else {
+                break;
+            } 
         }
     }
     return errorStatus;
