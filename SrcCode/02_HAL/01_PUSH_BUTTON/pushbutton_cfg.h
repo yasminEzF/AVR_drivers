@@ -8,16 +8,16 @@
 #define PB_1            0
 #define PB_1_PORT       port_enumPortC
 #define PB_1_PIN        port_enumP0
-#define PB_1_STATE      pb_activeHigh
+#define PB_1_STATE      pb_externalPD
 
 #define PB_2           1
 #define PB_2_PORT      port_enumPortC
 #define PB_2_PIN       port_enumP1
-#define PB_2_STATE     pb_activeLow
+#define PB_2_STATE     pb_internalPU
 
 typedef enum {
-    pb_activeLow = 0,
-    pb_activeHigh
+    pb_externalPD = 0,
+    pb_internalPU
 }PBEnumState_t;
 
 typedef struct {
