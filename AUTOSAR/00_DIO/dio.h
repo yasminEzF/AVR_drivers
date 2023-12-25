@@ -2,7 +2,17 @@
 #define DIO_H_
 
 #include "std_types.h"
+/*****************************************************************************/
+/*                             development errors                            */
+/*****************************************************************************/
+#define DIO_E_PARAM_INVALID_CHANNEL_ID    0x0A
+#define DIO_E_PARAM_INVALID_PORT_ID       0x14
+#define DIO_E_PARAM_INVALID_GROUP         0x1F
+#define DIO_E_PARAM_POINTER               0x20
 
+/*****************************************************************************/
+/*                               type definitions                            */
+/*****************************************************************************/
 /**
  * @brief numeric ID of DIO channel ( 0 ~ 31 )
 */
@@ -34,7 +44,7 @@ typedef struct {
      * the port on which the Channel group is defined
     */
     Dio_PortType port;
-}Dio_ChannelGroupType;
+} Dio_ChannelGroupType;
 
 /**
  * @brief possible levels a DIO channel can have (input or output)
@@ -60,62 +70,63 @@ typedef uint8 Dio_PortLevelType;
 /*****************************************************************************/
 /**
  * @brief  Returns the value of the specified DIO channel
- * @param  Dio_ChannelType ID of DIO channel (0 ~ 31)
+ * @param  ChannelId ID of DIO channel (0 ~ 31)
  * @return Dio_LevelType (STD_HIGH or STD_LOW)
 */
 Dio_LevelType Dio_ReadChannel (Dio_ChannelType ChannelId);
 /**
- * @brief  Returns the value of the specified DIO channel
- * @param  Dio_ChannelType ID of DIO channel (0 ~ 31)
- * @param  Dio_LevelType (STD_HIGH or STD_LOW)
+ * @brief  sets the level of a specified DIO channel
+ * @param  ChannelId ID of DIO channel (0 ~ 31)
+ * @param  Level (STD_HIGH or STD_LOW)
  * @return void
 */
 void Dio_WriteChannel (Dio_ChannelType ChannelId, Dio_LevelType Level);
 /**
  * @brief  Returns the level of all channels of that port
- * @param  Dio_PortType ID of DIO Port (0 ~ 3)
+ * @param  PortId ID of DIO Port (0 ~ 3)
  * @return Dio_PortLevelType Level of all channels of that port
 */
 Dio_PortLevelType Dio_ReadPort (Dio_PortType PortId);
 /**
  * @brief  sets a value to the port
- * @param  Dio_PortType ID of DIO Port (0 ~ 3)
- * @param  Dio_PortLevelType Value to be written (0x00 ~ 0xFF)
+ * @param  PortId ID of DIO Port (0 ~ 3)
+ * @param  Level Value to be written (0x00 ~ 0xFF)
  * @return none
 */
 void Dio_WritePort (Dio_PortType PortId, Dio_PortLevelType Level);
 
 /**
  * @brief  reads a subset of the adjoining bits of a port
- * @param  Dio_ChannelGroupType* Pointer to ChannelGroup
+ * @param  ChannelGroupIdPtr* Pointer to ChannelGroup
  * @return Dio_PortLevelType Level of a ChannelGroup
 */
 Dio_PortLevelType Dio_ReadChannelGroup (const Dio_ChannelGroupType* ChannelGroupIdPtr);
 
 /**
  * @brief  sets a subset of the adjoining bits of a port to a specified level
- * @param  Dio_ChannelGroupType* Pointer to ChannelGroup
- * @param  Dio_PortLevelType Value to be written to ChannelGroup
+ * @param  ChannelGroupIdPtr* Pointer to ChannelGroup
+ * @param  Level Value to be written to ChannelGroup
  * @return none
 */
 void Dio_WriteChannelGroup (const Dio_ChannelGroupType* ChannelGroupIdPtr, Dio_PortLevelType Level);
 
-//void Dio_GetVersionInfo( Std_VersionInfoType* VersionInfo );
-
 /**
  * @brief  flips (change from 1 to 0 or from 0 to 1) the level of a channel and return the level of the channel after flip
- * @param  Dio_ChannelType ID of DIO channel (0 ~ 31)
- * @return Dio_LevelType Value to be written (STD_HIGH or STD_LOW)
+ * @param  ChannelId ID of DIO channel (0 ~ 31)
+ * @return Dio_LevelType Value after flip (STD_HIGH or STD_LOW)
 */
 Dio_LevelType Dio_FlipChannel( Dio_ChannelType ChannelId );
 
 /**
  * @brief  sets the value of a given port with required mask
- * @param  Dio_PortType ID of DIO Port (0 ~ 3)
- * @param  Dio_PortLevelType Value to be written (0x00 ~ 0xFF)
- * @param  Dio_PortLevelType Channels to be masked in the port (if mask = 1 -> write level value)
+ * @param  PortId ID of DIO Port (0 ~ 3)
+ * @param  Level Value to be written (0x00 ~ 0xFF)
+ * @param  Mask Channels to be masked in the port (if mask = 1 -> write level value)
  * @return none
 */
 void Dio_MaskedWritePort( Dio_PortType PortId, Dio_PortLevelType Level, Dio_PortLevelType Mask );
+
+
+//void Dio_GetVersionInfo( Std_VersionInfoType* VersionInfo );
 
 #endif /* DIO_H_ */
