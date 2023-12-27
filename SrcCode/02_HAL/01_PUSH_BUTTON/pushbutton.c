@@ -5,7 +5,7 @@
 
 extern PBConfigStruct_t pbCfgStructArr [NUM_PB];
 
-pb_enumError_t pbInit(void) {
+pb_enumError_t PB_Init(void) {
     pb_enumError_t errorStatus = pb_enumNotOk;
     port_configStruct_t current_pb;
     for(u8 i = 0; i < NUM_PB; i++) {
@@ -33,7 +33,7 @@ pb_enumError_t pbInit(void) {
     return errorStatus;
 }
 
-pb_enumError_t pbRead(u8 pb_id,u8* pb_reading) {
+pb_enumError_t PB_ReadState(u8 pb_id, u8* pb_state) {
     pb_enumError_t errorStatus = pb_enumNotOk;
     if(pb_id >= NUM_PB) {
             errorStatus = pb_enumPBOutOfBounds;
@@ -46,20 +46,20 @@ pb_enumError_t pbRead(u8 pb_id,u8* pb_reading) {
                 case pb_externalPD:     
                     switch (temp) {
                         case DIO_enumLogicHigh:
-                            *pb_reading = pb_pressed;
+                            *pb_state = pb_pressed;
                         break;
                         case DIO_enumLogicLow:
-                            *pb_reading = pb_notPressed;
+                            *pb_state = pb_notPressed;
                         break;
                     }                    
                 break;
                 case pb_internalPU:
                     switch(temp) {
                         case DIO_enumLogicHigh:
-                            *pb_reading = pb_notPressed;
+                            *pb_state = pb_notPressed;
                         break;
                         case DIO_enumLogicLow:
-                            *pb_reading = pb_pressed;
+                            *pb_state = pb_pressed;
                         break;
                     }                   
                 break;

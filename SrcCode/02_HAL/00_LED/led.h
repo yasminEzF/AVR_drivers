@@ -18,10 +18,8 @@ typedef enum
 
 }led_enumError_t;
 
-led_enumError_t ledInit(void);
-led_enumError_t ledOn(u8 led_id);
-led_enumError_t ledOff(u8 led_id);
+led_enumError_t LED_init(void);
 
-//LED_enuSetLedState(u8 Copy_u8LedName, u8 Copy_u8State);
+led_enumError_t LED_SetLedState(u8 led_id, u8 State);
 
 #endif

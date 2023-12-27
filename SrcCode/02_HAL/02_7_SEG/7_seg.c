@@ -1,15 +1,92 @@
-
+#include "SrcCode\00_LIB\std_types.h"
 #include "7_seg_cfg.h"
 #include "7_seg.h"
-#include "../../01_MCAL/01_PORT/port.h"
-#include "../../01_MCAL/00_DIO/dio.h"
+#include "SrcCode\01_MCAL\01_PORT\port.h"
+#include "SrcCode\01_MCAL\00_DIO\dio.h"
 
-static seg_enumError_t segLedOn(u8 seg_id, seg_enumLed_t seg_led_id);
-static seg_enumError_t segLedOff(u8 seg_id, seg_enumLed_t seg_led_id);
+/**
+ * @brief  turns on a led segment in a specified seven segment
+ * @param  seg_id seven segment index
+ * @param  seg_led_id specific led segment index
+ * @return seg_enumError_t seven segment error status
+*/
+static seg_enumError_t _7SEG_SegLedOn(u8 seg_id, seg_enumLed_t seg_led_id);
+
+/**
+ * @brief  turns off a led segment in a specified seven segment
+ * @param  seg_id seven segment index
+ * @param  seg_led_id specific led segment index
+ * @return seg_enumError_t seven segment error status
+*/
+static seg_enumError_t _7SEG_SegLedOff(u8 seg_id, seg_enumLed_t seg_led_id);
+
+/**
+ * @brief  displays a single digit number on a specified seven segment
+ * @param  seg_id seven segment index
+ * @param  value
+ * @return seg_enumError_t seven segment error status
+*/
+seg_enumError_t _7SEG_DisplayValueSingleSeg (u8 seg_id,u8 value) {
+    seg_enumError_t errorStatus = seg_enumNotOk;
+    if(seg_id >= NUM_SEG) {
+        errorStatus = seg_enumSegOutOfBounds;
+    }
+    else if(value > MAX_DISPLAY_VALUE) {
+        errorStatus = seg_enumDisplayValueOutOfBounds;
+    } 
+    else {
+		u8 displayValue;
+		switch(value) {
+			case 0:
+				displayValue = DISPLAY_0;
+			break;
+			case 1:
+				displayValue = DISPLAY_1;
+			break;
+			case 2:
+				displayValue = DISPLAY_2;
+			break;
+			case 3:
+				displayValue = DISPLAY_3;
+			break;
+			case 4:
+				displayValue = DISPLAY_4;
+			break;
+			case 5:
+				displayValue = DISPLAY_5;
+			break;
+			case 6:
+				displayValue = DISPLAY_6;
+			break;
+			case 7:
+				displayValue = DISPLAY_7;
+			break;
+			case 8:
+				displayValue = DISPLAY_8;
+			break;
+			case 9:
+				displayValue = DISPLAY_9;
+			break;
+			default:
+				displayValue = 0x00;
+		}
+        for(seg_enumLed_t led_id = a; led_id <= dp; led_id++) {
+            errorStatus = seg_enumNotOk;
+            if((displayValue >> led_id) & 0x1) {
+                _7SEG_SegLedOn(seg_id, led_id);
+            }
+            else {
+                _7SEG_SegLedOff(seg_id, led_id);
+            }
+            errorStatus = seg_enumOk;
+        }
+    }
+    return errorStatus;
+}
 
 extern segConfigStruct_t segCfgStructArr[NUM_SEG];
 
-seg_enumError_t segInit (void) {
+seg_enumError_t _7SEG_Init (void) {
     seg_enumError_t errorStatus = seg_enumNotOk;
     port_configStruct_t current_seg;
     for(u8 i = 0; i < NUM_SEG; i++) {
@@ -43,262 +120,7 @@ seg_enumError_t segInit (void) {
     }
     return errorStatus;
 }
-
-seg_enumError_t seg_displayValueSingleSeg (u8 seg_id,u8 value) {
-    seg_enumError_t errorStatus = seg_enumNotOk;
-    if(seg_id >= NUM_SEG) {
-        errorStatus = seg_enumSegOutOfBounds;
-    }
-    else if(value > MAX_DISPLAY_VALUE) {
-        errorStatus = seg_enumDisplayValueOutOfBounds;
-    } 
-    else {
-        switch(value) {
-            case 0:
-            /**
-             * on: a b c d e f
-             * off: g dp
-            */
-                if(segLedOn(seg_id,a))
-                    break;
-                if(segLedOn(seg_id,b))
-                    break;
-                if(segLedOn(seg_id,c))
-                    break;
-                if(segLedOn(seg_id,d))
-                    break;
-                if(segLedOn(seg_id,e))
-                    break;
-                if(segLedOn(seg_id,f))
-                    break;
-
-                if(segLedOff(seg_id,g))
-                    break;
-                if(segLedOff(seg_id,dp))
-                    break;
-            errorStatus = seg_enumOk;
-            break;
-            case 1:
-            /**
-             * on: b c
-             * off:
-            */
-                if(segLedOn(seg_id,b))
-                    break;
-                if(segLedOn(seg_id,c))
-                    break;
-
-                if(segLedOff(seg_id,a))
-                    break;
-                if(segLedOff(seg_id,d))
-                    break;
-                if(segLedOff(seg_id,e))
-                    break;
-                if(segLedOff(seg_id,f))
-                    break;
-                if(segLedOff(seg_id,g))
-                    break;
-                if(segLedOff(seg_id,dp))
-                    break;
-            errorStatus = seg_enumOk;
-            break;
-            case 2:
-            /**
-             * on: a b d e g
-             * off:
-            */
-                if(segLedOn(seg_id,a))
-                    break;
-                if(segLedOn(seg_id,b))
-                    break;
-                if(segLedOn(seg_id,d))
-                    break;
-                if(segLedOn(seg_id,e))
-                    break;
-                if(segLedOn(seg_id,g))
-                    break;
-
-                if(segLedOff(seg_id,c))
-                    break;
-                if(segLedOff(seg_id,f))
-                    break;
-                if(segLedOff(seg_id,dp))
-                    break;
-            errorStatus = seg_enumOk;
-            break;
-            case 3:
-            /**
-             * on: a b c d g
-             * off:
-            */
-                if(segLedOn(seg_id,a))
-                    break;
-                if(segLedOn(seg_id,b))
-                    break;
-                if(segLedOn(seg_id,c))
-                    break;
-                if(segLedOn(seg_id,d))
-                    break;
-                if(segLedOn(seg_id,g))
-                    break;
-
-                if(segLedOff(seg_id,e))
-                    break;
-                if(segLedOff(seg_id,f))
-                    break;
-                if(segLedOff(seg_id,dp))
-                    break;
-            errorStatus = seg_enumOk;
-            break;
-            case 4:
-            /**
-             * on: b c f g
-             * off:
-            */
-                if(segLedOn(seg_id,b))
-                    break;
-                if(segLedOn(seg_id,c))
-                    break;
-                if(segLedOn(seg_id,f))
-                    break;
-                if(segLedOn(seg_id,g))
-                    break;
-
-                if(segLedOff(seg_id,a))
-                    break;
-                if(segLedOff(seg_id,d))
-                    break;
-                if(segLedOff(seg_id,e))
-                    break;
-                if(segLedOff(seg_id,dp))
-                    break;
-            errorStatus = seg_enumOk;
-            break;
-            case 5:
-            /**
-             * on: a c d f g
-             * off:
-            */
-                if(segLedOn(seg_id,a))
-                    break;
-                if(segLedOn(seg_id,c))
-                    break;
-                if(segLedOn(seg_id,d))
-                    break;
-                if(segLedOn(seg_id,f))
-                    break;
-                if(segLedOn(seg_id,g))
-                    break;
-
-                if(segLedOff(seg_id,b))
-                    break;
-                if(segLedOff(seg_id,e))
-                    break;
-                if(segLedOff(seg_id,dp))
-                    break;
-            errorStatus = seg_enumOk;
-            break;
-            case 6:
-            /**
-             * on: a c d e f g
-             * off: b dp
-            */
-                if(segLedOn(seg_id,a))
-                    break;
-                if(segLedOn(seg_id,c))
-                    break;
-                if(segLedOn(seg_id,d))
-                    break;
-                if(segLedOn(seg_id,e))
-                    break;
-                if(segLedOn(seg_id,f))
-                    break;
-                if(segLedOn(seg_id,g))
-                    break;
-
-                if(segLedOff(seg_id,b))
-                    break;
-                if(segLedOff(seg_id,dp))
-                    break;
-            errorStatus = seg_enumOk;
-            break;
-            case 7:
-            /**
-             * on: a b c
-             * off: d e f g dp
-            */
-                if(segLedOn(seg_id,a))
-                    break;
-                if(segLedOn(seg_id,b))
-                    break;
-                if(segLedOn(seg_id,c))
-                    break;
-
-                if(segLedOff(seg_id,d))
-                    break;
-                if(segLedOff(seg_id,e))
-                    break;
-                if(segLedOff(seg_id,f))
-                    break;
-                if(segLedOff(seg_id,g))
-                    break;
-                if(segLedOff(seg_id,dp))
-                    break; 
-            errorStatus = seg_enumOk;
-            break;
-            case 8:
-            /**
-             * on: a b c d e f g 
-             * off: dp
-            */
-                if(segLedOn(seg_id,a))
-                    break;
-                if(segLedOn(seg_id,b))
-                    break;
-                if(segLedOn(seg_id,c))
-                    break;
-                if(segLedOn(seg_id,d))
-                    break;
-                if(segLedOn(seg_id,e))
-                    break;
-                if(segLedOn(seg_id,f))
-                    break;
-                if(segLedOn(seg_id,g))
-                    break;
-
-                if(segLedOff(seg_id,dp))
-                    break;
-            errorStatus = seg_enumOk;
-            break;
-            case 9:
-            /**
-             * on: a b c d f g 
-             * off: e dp
-            */
-                if(segLedOn(seg_id,a))
-                    break;
-                if(segLedOn(seg_id,b))
-                    break;
-                if(segLedOn(seg_id,c))
-                    break;
-                if(segLedOn(seg_id,d))
-                    break;
-                if(segLedOn(seg_id,f))
-                    break;
-                if(segLedOn(seg_id,g))
-                    break;
-
-                if(segLedOff(seg_id,e))
-                    break;
-                if(segLedOff(seg_id,dp))
-                    break;
-            errorStatus = seg_enumOk;
-            break;
-        }
-    }
-    return errorStatus;
-}
-static seg_enumError_t segLedOff(u8 seg_id, seg_enumLed_t seg_led_id) {
+static seg_enumError_t _7SEG_SegLedOff(u8 seg_id, seg_enumLed_t seg_led_id) {
     seg_enumError_t errorStatus = seg_enumNotOk;
     switch(segCfgStructArr[seg_id].segCommon) {
         case seg_enumCommonAnode:
@@ -312,7 +134,7 @@ static seg_enumError_t segLedOff(u8 seg_id, seg_enumLed_t seg_led_id) {
     }
     return errorStatus;
 }
-static seg_enumError_t segLedOn(u8 seg_id, seg_enumLed_t seg_led_id) {
+static seg_enumError_t _7SEG_SegLedOn(u8 seg_id, seg_enumLed_t seg_led_id) {
     seg_enumError_t errorStatus = seg_enumNotOk;
     switch(segCfgStructArr[seg_id].segCommon) {
         case seg_enumCommonAnode:
@@ -327,7 +149,7 @@ static seg_enumError_t segLedOn(u8 seg_id, seg_enumLed_t seg_led_id) {
     return errorStatus;
 }
 
-seg_enumError_t seg_displayValueMultiSeg (u16 value) {
+seg_enumError_t _7SEG_DisplayValueMultiSeg (u16 value) {
     seg_enumError_t errorStatus = seg_enumNotOk;
     u16 max_value = 1;
     for(u8 i = NUM_SEG; i > 0; i--) {
@@ -339,7 +161,7 @@ seg_enumError_t seg_displayValueMultiSeg (u16 value) {
     }
     else {
         for(u8 i = 0; value > 0 && i < NUM_SEG; i++, value /= 10) {
-            seg_displayValueSingleSeg(i, value % 10);
+            _7SEG_DisplayValueSingleSeg(i, value % 10);
         }
         errorStatus = seg_enumOk;
     }
