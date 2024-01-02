@@ -4,6 +4,7 @@
 
 ### 1. `typedef uint8 Dio_ChannelType;`
 numeric ID of DIO channel ( 0 ~ 31 ).
+
 ---
 ### 2. `typedef uint8 Dio_PortType;`
 numeric ID of DIO port ( 0 ~ 3 ).
@@ -15,11 +16,11 @@ numeric ID of DIO port ( 0 ~ 3 ).
 --- 
 ### 3. `typedef struct Dio_ChannelGroupType;`
 Type for the definition of a channel group, which consists of several adjoining channels within a port.
-> `uint8 mask;` defines the positions of the channel group.
+- `uint8 mask;` defines the positions of the channel group.
 
-> `uint8 offset;` the position of the Channel Group on the port, counted from the LSB.
+- `uint8 offset;` the position of the Channel Group on the port, counted from the LSB.
 
-> `Dio_PortType port;` the port on which the Channel group is defined.
+- `Dio_PortType port;` the port on which the Channel group is defined.
 ---
 ### 4. `typedef uint8 Dio_LevelType;`
 possible levels a DIO channel can have (input or output).
@@ -31,6 +32,7 @@ possible levels a DIO channel can have (input or output).
 ---
 ### 5. `typedef uint8 Dio_PortLevelType;`
 the μC owns ports of 8-bit widths, Dio_PortLevelType inherits the size of the port (0x00 ~ 0xFF).
+
 ---
 
 ## DIO module Functions
