@@ -3,10 +3,12 @@
 #include "led.h"
 #include "led_cfg.h"
 
+static led_enumError_t LED_LedOn(u8 led_id);
+static led_enumError_t LED_LedOff(u8 led_id);
 
 extern ledConfigStruct_t ledCfgStructArr [NUM_LEDS];
 
-led_enumError_t ledInit(void) {
+led_enumError_t LED_init(void) {
     led_enumError_t errorStatus = led_enumNotOk;
     port_configStruct_t current_led;
     for(u8 i = 0; i < NUM_LEDS; i++) {
@@ -57,7 +59,7 @@ led_enumError_t ledInit(void) {
 }
 
 
-led_enumError_t ledOn(u8 led_id) {
+led_enumError_t LED_LedOn(u8 led_id) {
     led_enumError_t errorStatus = led_enumNotOk;
     if(led_id >= NUM_LEDS) {
         errorStatus = led_enumLedOutOfBounds;
@@ -79,7 +81,7 @@ led_enumError_t ledOn(u8 led_id) {
     return errorStatus;
 }
 
-led_enumError_t ledOff(u8 led_id) {
+led_enumError_t LED_LedOff(u8 led_id) {
     led_enumError_t errorStatus = led_enumNotOk;
     if(led_id >= NUM_LEDS) {
         errorStatus = led_enumLedOutOfBounds;
@@ -98,6 +100,19 @@ led_enumError_t ledOff(u8 led_id) {
                 }
             break;
         }
+    }
+    return errorStatus;
+}
+
+led_enumError_t LED_SetLedState(u8 led_id, u8 State) {
+    led_enumError_t errorStatus = led_enumNotOk;
+    switch(State) {
+        case led_on:
+            errorStatus = LED_LedOn(led_id);
+        break;
+        case led_off:
+            errorStatus = LED_LedOff(led_id);
+        break;
     }
     return errorStatus;
 }

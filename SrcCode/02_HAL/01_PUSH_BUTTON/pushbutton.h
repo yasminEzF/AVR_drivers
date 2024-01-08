@@ -23,7 +23,7 @@ typedef enum {
     pb_pressed
 }pb_pressedState;
 
-pb_enumError_t pbInit(void);
-pb_enumError_t pbRead(u8 pb_id,u8* pb_reading);
+pb_enumError_t PB_Init(void);
+pb_enumError_t PB_ReadState(u8 pb_id,u8* pb_state);
 
 #endif
